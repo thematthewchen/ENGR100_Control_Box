@@ -4,7 +4,7 @@
 //This code will control the functionality of the Control Box that will 
 //control our Underwater ROV
 
-//basically the constructor (gets called first)
+//this is the function that gets called first when the program runs
 void setup() {
   // put your setup code here, to run once:
 
