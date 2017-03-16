@@ -113,49 +113,60 @@ void loop()  {
  * switch control scheme.
  */
 
- /*
-  
+//There are 4 thrusters on our ROV labeled here:
+//a: up down
+//b: forward back
+//c: leftside angled
+//d: rightside angled
+
+  //up (if forward and not reverse)
   if ( digitalRead(aFor) && (!digitalRead(aRev)))  {                  //aFor
     bitWrite( rdgs[0], 3, 1);
   }
-  else  bitWrite( rdgs[0], 3, 0);
-  
+  else  bitWrite( rdgs[0], 3, 0);//returns off
+
+  //forward
   if ( digitalRead(bFor) && (!digitalRead(bRev)))  {                  //bFor
     bitWrite( rdgs[0], 1, 1);
   }
   else  bitWrite( rdgs[0], 1, 0);
-  
+
+  //left
   if ( digitalRead(cFor) && (!digitalRead(cRev)))  {                  //cFor
     bitWrite( rdgs[1], 3, 1);
   }
   else  bitWrite( rdgs[1], 3, 0);
-  
+
+  //right
   if ( digitalRead(dFor) && (!digitalRead(dRev)))  {                  //dFor
     bitWrite( rdgs[1], 1, 1);
   }
   else  bitWrite( rdgs[1], 1, 0);
   
+  //down
   if ( digitalRead(aRev) && (!digitalRead(aFor)))  {                  //aRev
     bitWrite( rdgs[0], 2, 1);
   }
   else  bitWrite( rdgs[0], 2, 0);
-  
+
+  //backward
   if ( digitalRead(bRev) && (!digitalRead(bFor)))  {                  //bRev
     bitWrite( rdgs[0], 0, 1);
   }
   else  bitWrite( rdgs[0], 0, 0);
-  
+
+  //turn left
   if ( digitalRead(cRev) && (!digitalRead(cFor)))  {                  //cRev
     bitWrite( rdgs[1], 2, 1);
   }
   else  bitWrite( rdgs[1], 2, 0);
-  
+
+  //turn right
   if ( digitalRead(dRev) && (!digitalRead(dFor)))  {                  //dRev
     bitWrite( rdgs[1], 0, 1);
   }
   else  bitWrite( rdgs[1], 0, 0);
   
- */
  
 /************************DO NOT ALTER BELOW THIS LINE**************/ 
   
