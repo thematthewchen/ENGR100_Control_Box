@@ -88,7 +88,8 @@ void loop()  {
  * further below is an example of the same operations done in single commands
  * to set each bit where things are more explicit.  
  */
-    
+
+  //commented out the for loop because we are customizing our buttons
   /*
   arrayOfst = 1;                                    // 1 or -1 picks the paired Foward or Reverse
   for ( int i = 0 ; i < 8 ; ++i )   {
