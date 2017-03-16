@@ -89,7 +89,7 @@ void loop()  {
  * to set each bit where things are more explicit.  
  */
     
-  
+  /*
   arrayOfst = 1;                                    // 1 or -1 picks the paired Foward or Reverse
   for ( int i = 0 ; i < 8 ; ++i )   {
       int k = i/4;                                  //this is either 0 or 1 to pick the byte
@@ -101,9 +101,9 @@ void loop()  {
       else bitWrite( rdgs[k], j, 0 ) ;
       
       arrayOfst = arrayOfst * (-1);                 //flip the counter. For a "forward", the corresponding
-                                                    //'Reverse' to check is hte next value counting up. For a 'Reverse'
+                                                    //'Reverse' to check is the next value counting up. For a 'Reverse'
                                                     // it is the next value counting down.
-  }
+  }*/
   
 /**********************************************************************************/
 
@@ -113,60 +113,78 @@ void loop()  {
  * switch control scheme.
  */
 
+//For Reference: (action described by this code: associated bit to write)
+//aFor: rdgs[0],3
+//bFor: rdgs[0],1
+//cFor: rdgs[1],3
+//dFor: rdgs[1],1
+//aRev: rdgs[0],2
+//bRev: rdgs[0],0
+//cRev: rdgs[1],2
+//dRev: rdgs[1],0
+
 //There are 4 thrusters on our ROV labeled here:
 //a: up down
 //b: forward back
 //c: leftside angled
 //d: rightside angled
 
-  //up (if forward and not reverse)
+  //ROV up (if thruster is forward and not reverse)
+  //a thruster goes forward
   if ( digitalRead(aFor) && (!digitalRead(aRev)))  {                  //aFor
     bitWrite( rdgs[0], 3, 1);
   }
   else  bitWrite( rdgs[0], 3, 0);//returns off
 
-  //forward
+  //ROV forward
+  //b,c,d thruster goes forward
   if ( digitalRead(bFor) && (!digitalRead(bRev)))  {                  //bFor
     bitWrite( rdgs[0], 1, 1);
   }
   else  bitWrite( rdgs[0], 1, 0);
 
-  //left
+  //ROV right
+  //d thruster reverse, c thruster partially forward [need to check this]
   if ( digitalRead(cFor) && (!digitalRead(cRev)))  {                  //cFor
     bitWrite( rdgs[1], 3, 1);
   }
   else  bitWrite( rdgs[1], 3, 0);
-
-  //right
+  
+  //ROV left
+  //c thruster reverse, d thruster partially forward [need to check this]
   if ( digitalRead(dFor) && (!digitalRead(dRev)))  {                  //dFor
     bitWrite( rdgs[1], 1, 1);
   }
   else  bitWrite( rdgs[1], 1, 0);
   
-  //down
+  //ROV down
+  //a thruster reverse
   if ( digitalRead(aRev) && (!digitalRead(aFor)))  {                  //aRev
     bitWrite( rdgs[0], 2, 1);
   }
   else  bitWrite( rdgs[0], 2, 0);
 
-  //backward
+  //ROV backward
+  //b thruster reverse
   if ( digitalRead(bRev) && (!digitalRead(bFor)))  {                  //bRev
     bitWrite( rdgs[0], 0, 1);
   }
   else  bitWrite( rdgs[0], 0, 0);
 
-  //turn left
+  //ROV turn left
+  //d thruster forward??
   if ( digitalRead(cRev) && (!digitalRead(cFor)))  {                  //cRev
     bitWrite( rdgs[1], 2, 1);
   }
   else  bitWrite( rdgs[1], 2, 0);
 
-  //turn right
+  //ROV turn right
+  //c thruster forward??
   if ( digitalRead(dRev) && (!digitalRead(dFor)))  {                  //dRev
     bitWrite( rdgs[1], 0, 1);
   }
   else  bitWrite( rdgs[1], 0, 0);
-  
+
  
 /************************DO NOT ALTER BELOW THIS LINE**************/ 
   
