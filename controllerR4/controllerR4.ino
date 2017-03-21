@@ -147,16 +147,24 @@ void loop()  {
   //ROV right
   //d thruster reverse, c thruster partially forward [need to check this]
   if ( digitalRead(cFor) && (!digitalRead(cRev)))  {                  //cFor
-    bitWrite( rdgs[1], 3, 1);
+    bitWrite( rdgs[1], 3, 1);//cForward
+    bitWrite( rdgs[1], 0, 1);//dReverse
   }
-  else  bitWrite( rdgs[1], 3, 0);
+  else{  
+    bitWrite( rdgs[1], 3, 0);
+    bitWrite( rdgs[1], 0, 0);
+  }
   
   //ROV left
   //c thruster reverse, d thruster partially forward [need to check this]
   if ( digitalRead(dFor) && (!digitalRead(dRev)))  {                  //dFor
-    bitWrite( rdgs[1], 1, 1);
+    bitWrite( rdgs[1], 1, 1);//dForward
+    bitWrite( rdgs[1], 2, 1);//cReverse
   }
-  else  bitWrite( rdgs[1], 1, 0);
+  else{
+    bitWrite( rdgs[1], 1, 0);
+    bitWrite( rdgs[1], 2, 0);
+  }
   
   //ROV down
   //a thruster reverse
@@ -172,7 +180,7 @@ void loop()  {
   }
   else  bitWrite( rdgs[0], 0, 0);
 
-  //ROV turn left
+  /*//ROV turn left
   //d thruster forward??
   if ( digitalRead(cRev) && (!digitalRead(cFor)))  {                  //cRev
     bitWrite( rdgs[1], 2, 1);
@@ -184,7 +192,7 @@ void loop()  {
   if ( digitalRead(dRev) && (!digitalRead(dFor)))  {                  //dRev
     bitWrite( rdgs[1], 0, 1);
   }
-  else  bitWrite( rdgs[1], 0, 0);
+  else  bitWrite( rdgs[1], 0, 0);*/
 
  
 /************************DO NOT ALTER BELOW THIS LINE**************/ 
