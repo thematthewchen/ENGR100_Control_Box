@@ -148,67 +148,71 @@ void loop()  {
   //ROV forward
   //y,z thruster goes forward
   if ( digitalRead(dFor) && (!digitalRead(dRev)))  {                  //dFor
-    bitWrite( rdgs[0], 1, 1);//bForward
-    bitWrite( rdgs[1], 3, 1);//cForward
-    bitWrite( rdgs[1], 1, 1);//dForward
+    bitWrite( rdgs[1], 3, 1);//y forward
+    bitWrite( rdgs[1], 1, 1);//z forward
   }
-  else  bitWrite( rdgs[0], 1, 0);
+  else  {
+    bitWrite( rdgs[1], 3, 0);//y forward
+    bitWrite( rdgs[1], 1, 0);//z forward
+  }
 
   //ROV right
   //x thruster reverse
-  if ( digitalRead(cFor) && (!digitalRead(cRev)) && (!digitalRead(dFor)))  {                  //cFor
-    bitWrite( rdgs[1], 3, 1);//cForward
-    bitWrite( rdgs[1], 0, 1);//dReverse
+  if ( digitalRead(bRev) && (!digitalRead(bFor)))  {                  //bRev
+    bitWrite( rdgs[0], 0, 1);//x reverse
   }
   else{  
-    bitWrite( rdgs[1], 3, 0);
-    bitWrite( rdgs[1], 0, 0);
+    bitWrite( rdgs[0], 0, 0);
   }
   
   //ROV left
   //x thruster forward
-  if ( digitalRead(dFor) && (!digitalRead(dRev)) && (!digitalRead(cFor)))  {                  //dFor
-    bitWrite( rdgs[1], 1, 1);//dForward
-    bitWrite( rdgs[1], 2, 1);//cReverse
+  if ( digitalRead(bFor) && (!digitalRead(bRev)))  {                  //bFor
+    bitWrite( rdgs[0], 1, 1);//x forward
   }
   else{
-    bitWrite( rdgs[1], 1, 0);
-    bitWrite( rdgs[1], 2, 0);
+    bitWrite( rdgs[0], 1, 0);
   }
   
   //ROV down
   //w thruster forward
   if ( digitalRead(aRev) && (!digitalRead(aFor)))  {                  //aRev
-    bitWrite( rdgs[0], 2, 1);
+    bitWrite( rdgs[0], 3, 1);
   }
-  else  bitWrite( rdgs[0], 2, 0);
+  else  bitWrite( rdgs[0], 3, 0);
 
   //ROV backward
   //y,z thruster reverse
-  if ( digitalRead(bRev) && (!digitalRead(bFor)) && (!digitalRead(cFor)) && (!digitalRead(dFor)))  {                  //bRev
-    bitWrite( rdgs[0], 0, 1);//bReverse
-    bitWrite( rdgs[1], 2, 1);//cReverse
-    bitWrite( rdgs[1], 0, 1);//dReverse
+  if ( digitalRead(dRev) && (!digitalRead(dFor)))  {                  //dRev
+    bitWrite( rdgs[1], 2, 1);//y reverse
+    bitWrite( rdgs[1], 0, 1);//z reverse
   }
   else  {
-    bitWrite( rdgs[0], 0, 0);
-    bitWrite( rdgs[1], 2, 0);//cReverse
-    bitWrite( rdgs[1], 0, 0);//dReverse
+    bitWrite( rdgs[1], 2, 0);//y reverse
+    bitWrite( rdgs[1], 0, 0);//z reverse
   }
 
   //ROV turn left
   //z thruster forward, y thruster backward
-  if ( digitalRead(cRev) && (!digitalRead(cFor)))  {                  //cRev
-    bitWrite( rdgs[1], 2, 1);
+  if ( digitalRead(cFor) && (!digitalRead(cRev)))  {                  //cFor
+    bitWrite( rdgs[1], 2, 1);//y reverse
+    bitWrite( rdgs[1], 1, 1);//z forward
   }
-  else  bitWrite( rdgs[1], 2, 0);
+  else  {
+    bitWrite( rdgs[1], 2, 0);//y reverse
+    bitWrite( rdgs[1], 1, 0);//z forward
+  }
 
   //ROV turn right
   //z thruster backward, y thruster forward
-  if ( digitalRead(dRev) && (!digitalRead(dFor)))  {                  //dRev
-    bitWrite( rdgs[1], 0, 1);
+  if ( digitalRead(cRev) && (!digitalRead(cFor)))  {                  //cRev
+    bitWrite( rdgs[1], 0, 1);//z reverse
+    bitWrite( rdgs[1], 3, 1);//y forward
   }
-  else  bitWrite( rdgs[1], 0, 0);
+  else  {
+    bitWrite( rdgs[1], 0, 0);//z reverse
+    bitWrite( rdgs[1], 3, 0);//y forward
+  }
 
  
 /************************DO NOT ALTER BELOW THIS LINE**************/ 
