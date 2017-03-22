@@ -25,7 +25,7 @@
 #define ledPin A5
 
 
-const int setsPerSec = 6;                     //how fast to send data sets
+const int setsPerSec = 7;                     //how fast to send data sets
 const byte biteF = 0xFF;                      //this is the flag(start) byte
 const byte PASS = 0x55;                       //confirmation byte
 const byte FAIL = 0x0F;                       // Data check fail byte
@@ -54,8 +54,8 @@ void setup()   {
 
 void loop()  {
   
-  if ( !Serial.available() ) {                       //read any bytes off the buffer
-    digitalWrite ( ledPin, LOW );                    //if last byte is not a handshake turn off indicator
+  if ( !Serial.available() ) {                       //if no return handshake turn off indicator
+    digitalWrite ( ledPin, LOW );
   }
   else {
     for ( int j = Serial.available() ; j >  0 ; --j ) {
@@ -71,8 +71,9 @@ void loop()  {
                                                     // write data to the xmit array
                                                     // the servo positions are the 3rd and 4th byte
                                                     
-  rdgs[2] = byte(constrain(map(analogRead(servOnePin),0,1023,0,180),1, 179));
-  rdgs[3] = byte(constrain(map(analogRead(servTwoPin),0,1023,0,180),1, 179)); 
+//  rdgs[2] = byte(constrain(map(analogRead(servOnePin),0,1023,0,180),1, 179));
+//  rdgs[3] = byte(constrain(map(analogRead(servTwoPin),0,1023,0,180),1, 179)); 
+rdgs[2]=rdgs[3]=0;                      //no servos installed. With this line, A0 and A1 do not need grounding.
 
      
 /*****************DO NOT ALTER ABOVE THIS LINE !*************************************
@@ -88,9 +89,8 @@ void loop()  {
  * further below is an example of the same operations done in single commands
  * to set each bit where things are more explicit.  
  */
-
-  //commented out the for loop because we are customizing our buttons
-  /*
+    
+  
   arrayOfst = 1;                                    // 1 or -1 picks the paired Foward or Reverse
   for ( int i = 0 ; i < 8 ; ++i )   {
       int k = i/4;                                  //this is either 0 or 1 to pick the byte
@@ -102,9 +102,9 @@ void loop()  {
       else bitWrite( rdgs[k], j, 0 ) ;
       
       arrayOfst = arrayOfst * (-1);                 //flip the counter. For a "forward", the corresponding
-                                                    //'Reverse' to check is the next value counting up. For a 'Reverse'
+                                                    //'Reverse' to check is hte next value counting up. For a 'Reverse'
                                                     // it is the next value counting down.
-  }*/
+  }
   
 /**********************************************************************************/
 
@@ -114,102 +114,49 @@ void loop()  {
  * switch control scheme.
  */
 
-//For Reference: (Inputs)
-//aFor:    up
-//aRev:    down
-//bFor:    left
-//bRev:    right
-//cFor:    turn left
-//cRev:    turn right
-//dFor:    forward
-//dRev:    reverse
-
-//There are 4 thrusters on our ROV labeled here: (Output)
-//w: up down
-//   rdgs[0],3   w forward
-//   rdgs[0],2   w reverse
-//x: left right
-//   rdgs[0],1   x forward
-//   rdgs[0],0   x reverse
-//y: leftside forward
-//   rdgs[1],3   y forward
-//   rdgs[1],2   y reverse
-//z: rightside forward
-//   rdgs[1],1   z forward
-//   rdgs[1],0   z reverse
-
-  //ROV up (if thruster is forward and not reverse)
-  //w thruster reverse
+ /*
+  
   if ( digitalRead(aFor) && (!digitalRead(aRev)))  {                  //aFor
     bitWrite( rdgs[0], 3, 1);
   }
-  else  bitWrite( rdgs[0], 3, 0);//returns off
-
-  //ROV forward
-  //y,z thruster goes forward
-  if ( digitalRead(dFor) && (!digitalRead(dRev)))  {                  //dFor
-    bitWrite( rdgs[0], 1, 1);//bForward
-    bitWrite( rdgs[1], 3, 1);//cForward
-    bitWrite( rdgs[1], 1, 1);//dForward
+  else  bitWrite( rdgs[0], 3, 0);
+  
+  if ( digitalRead(bFor) && (!digitalRead(bRev)))  {                  //bFor
+    bitWrite( rdgs[0], 1, 1);
   }
   else  bitWrite( rdgs[0], 1, 0);
-
-  //ROV right
-  //x thruster reverse
-  if ( digitalRead(cFor) && (!digitalRead(cRev)) && (!digitalRead(dFor)))  {                  //cFor
-    bitWrite( rdgs[1], 3, 1);//cForward
-    bitWrite( rdgs[1], 0, 1);//dReverse
-  }
-  else{  
-    bitWrite( rdgs[1], 3, 0);
-    bitWrite( rdgs[1], 0, 0);
-  }
   
-  //ROV left
-  //x thruster forward
-  if ( digitalRead(dFor) && (!digitalRead(dRev)) && (!digitalRead(cFor)))  {                  //dFor
-    bitWrite( rdgs[1], 1, 1);//dForward
-    bitWrite( rdgs[1], 2, 1);//cReverse
+  if ( digitalRead(cFor) && (!digitalRead(cRev)))  {                  //cFor
+    bitWrite( rdgs[1], 3, 1);
   }
-  else{
-    bitWrite( rdgs[1], 1, 0);
-    bitWrite( rdgs[1], 2, 0);
-  }
+  else  bitWrite( rdgs[1], 3, 0);
   
-  //ROV down
-  //w thruster forward
+  if ( digitalRead(dFor) && (!digitalRead(dRev)))  {                  //dFor
+    bitWrite( rdgs[1], 1, 1);
+  }
+  else  bitWrite( rdgs[1], 1, 0);
+  
   if ( digitalRead(aRev) && (!digitalRead(aFor)))  {                  //aRev
     bitWrite( rdgs[0], 2, 1);
   }
   else  bitWrite( rdgs[0], 2, 0);
-
-  //ROV backward
-  //y,z thruster reverse
-  if ( digitalRead(bRev) && (!digitalRead(bFor)) && (!digitalRead(cFor)) && (!digitalRead(dFor)))  {                  //bRev
-    bitWrite( rdgs[0], 0, 1);//bReverse
-    bitWrite( rdgs[1], 2, 1);//cReverse
-    bitWrite( rdgs[1], 0, 1);//dReverse
+  
+  if ( digitalRead(bRev) && (!digitalRead(bFor)))  {                  //bRev
+    bitWrite( rdgs[0], 0, 1);
   }
-  else  {
-    bitWrite( rdgs[0], 0, 0);
-    bitWrite( rdgs[1], 2, 0);//cReverse
-    bitWrite( rdgs[1], 0, 0);//dReverse
-  }
-
-  //ROV turn left
-  //z thruster forward, y thruster backward
+  else  bitWrite( rdgs[0], 0, 0);
+  
   if ( digitalRead(cRev) && (!digitalRead(cFor)))  {                  //cRev
     bitWrite( rdgs[1], 2, 1);
   }
   else  bitWrite( rdgs[1], 2, 0);
-
-  //ROV turn right
-  //z thruster backward, y thruster forward
+  
   if ( digitalRead(dRev) && (!digitalRead(dFor)))  {                  //dRev
     bitWrite( rdgs[1], 0, 1);
   }
   else  bitWrite( rdgs[1], 0, 0);
-
+  
+ */
  
 /************************DO NOT ALTER BELOW THIS LINE**************/ 
   
@@ -220,4 +167,3 @@ void loop()  {
   }   
   delay(delayTime);                                                     //dont go faster than the payload can process data
 }
-
