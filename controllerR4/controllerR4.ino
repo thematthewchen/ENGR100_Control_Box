@@ -9,7 +9,15 @@
  * to load the program, disconnect the BT xmitter to enable the USB connection to the programmer
  * 
  */
-
+//For Reference: (Inputs)
+//aFor:    up
+//aRev:    down
+//bFor:    left
+//bRev:    right
+//cFor:    turn left
+//cRev:    turn right
+//dFor:    forward
+//dRev:    reverse
 
 #define aFor 13                                //8 pins for 8 motor control functions
 #define aRev 12                                // comment out the constant replacement 
@@ -141,21 +149,47 @@ void loop()  {
   //ROV up (if thruster is forward and not reverse)
   //w thruster reverse
   if ( digitalRead(aFor) && (!digitalRead(aRev)))  {                  //aFor
+    bitWrite( rdgs[0], 2, 1);
+  }
+  else  bitWrite( rdgs[0], 2, 0);//returns off
+  //ROV down
+  //w thruster forward
+  if ( digitalRead(aRev) && (!digitalRead(aFor)))  {                  //aRev
     bitWrite( rdgs[0], 3, 1);
   }
-  else  bitWrite( rdgs[0], 3, 0);//returns off
-
+  else  bitWrite( rdgs[0], 3, 0);
+  
   //ROV forward
   //y,z thruster goes forward
   if ( digitalRead(dFor) && (!digitalRead(dRev)))  {                  //dFor
     bitWrite( rdgs[1], 3, 1);//y forward
     bitWrite( rdgs[1], 1, 1);//z forward
   }
-  else  {
-    bitWrite( rdgs[1], 3, 0);//y forward
-    bitWrite( rdgs[1], 1, 0);//z forward
+  //ROV backward
+  //y,z thruster reverse
+  else if ( digitalRead(dRev) && (!digitalRead(dFor)))  {                  //dRev
+    bitWrite( rdgs[1], 2, 1);//y reverse
+    bitWrite( rdgs[1], 0, 1);//z reverse
   }
-
+  //ROV turn left
+  //z thruster forward, y thruster backward
+  else if ( digitalRead(cFor) && (!digitalRead(cRev)))  {                  //cFor
+    bitWrite( rdgs[1], 2, 1);//y reverse
+    bitWrite( rdgs[1], 1, 1);//z forward
+  }
+  //ROV turn right
+  //z thruster backward, y thruster forward
+  else if ( digitalRead(cRev) && (!digitalRead(cFor)))  {                  //cRev
+    bitWrite( rdgs[1], 0, 1);//z reverse
+    bitWrite( rdgs[1], 3, 1);//y forward
+  }
+  else  {
+    bitWrite( rdgs[1], 3, 0);//y forward    
+    bitWrite( rdgs[1], 2, 0);//y reverse
+    bitWrite( rdgs[1], 1, 0);//z forward8
+    bitWrite( rdgs[1], 0, 0);//z reverse
+  }
+  
   //ROV right
   //x thruster reverse
   if ( digitalRead(bRev) && (!digitalRead(bFor)))  {                  //bRev
@@ -174,46 +208,7 @@ void loop()  {
     bitWrite( rdgs[0], 1, 0);
   }
   
-  //ROV down
-  //w thruster forward
-  if ( digitalRead(aRev) && (!digitalRead(aFor)))  {                  //aRev
-    bitWrite( rdgs[0], 3, 1);
-  }
-  else  bitWrite( rdgs[0], 3, 0);
-
-  //ROV backward
-  //y,z thruster reverse
-  if ( digitalRead(dRev) && (!digitalRead(dFor)))  {                  //dRev
-    bitWrite( rdgs[1], 2, 1);//y reverse
-    bitWrite( rdgs[1], 0, 1);//z reverse
-  }
-  else  {
-    bitWrite( rdgs[1], 2, 0);//y reverse
-    bitWrite( rdgs[1], 0, 0);//z reverse
-  }
-
-  //ROV turn left
-  //z thruster forward, y thruster backward
-  if ( digitalRead(cFor) && (!digitalRead(cRev)))  {                  //cFor
-    bitWrite( rdgs[1], 2, 1);//y reverse
-    bitWrite( rdgs[1], 1, 1);//z forward
-  }
-  else  {
-    bitWrite( rdgs[1], 2, 0);//y reverse
-    bitWrite( rdgs[1], 1, 0);//z forward
-  }
-
-  //ROV turn right
-  //z thruster backward, y thruster forward
-  if ( digitalRead(cRev) && (!digitalRead(cFor)))  {                  //cRev
-    bitWrite( rdgs[1], 0, 1);//z reverse
-    bitWrite( rdgs[1], 3, 1);//y forward
-  }
-  else  {
-    bitWrite( rdgs[1], 0, 0);//z reverse
-    bitWrite( rdgs[1], 3, 0);//y forward
-  }
-
+ 
  
 /************************DO NOT ALTER BELOW THIS LINE**************/ 
   
